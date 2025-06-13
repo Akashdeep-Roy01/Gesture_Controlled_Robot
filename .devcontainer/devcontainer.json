@@ -1,0 +1,56 @@
+{
+    "name": "Teleoperation Challenge",
+    "build": {
+      "dockerfile": "../Dockerfile",
+      "context": "."
+    },
+    "runArgs": [
+      "--gpus", "all",
+      "--env", "DISPLAY=${env:DISPLAY}",
+      "--volume", "${env:HOME}/.Xauthority:/home/ros/.Xauthority:ro",
+      "--network", "host",
+      "--device=/dev/video0:/dev/video0",  
+      "--device=/dev/video1:/dev/video1"   
+    ],
+    "containerEnv": {
+      "ROS_DISTRO": "humble"
+    },
+    "remoteUser": "ros",
+    "workspaceFolder": "/docker_ws",
+    "mounts": [
+      "source=${localWorkspaceFolder},target=/docker_ws,type=bind,consistency=cached"
+    ],
+    "customizations": {
+      "vscode": {
+        "extensions": [
+          "ms-vscode.cpptools",
+          "ms-python.python",
+          "ms-iot.vscode-ros",
+          "twxs.cmake",
+          "ms-vscode.cmake-tools",
+          "yzhang.markdown-all-in-one",
+          "redhat.vscode-yaml"
+        ],
+        "settings": {
+          "python.defaultInterpreterPath": "/usr/bin/python3",
+          "python.autoComplete.extraPaths": [
+            "/opt/ros/humble/lib/python3.10/site-packages"
+          ],
+          "python.analysis.extraPaths": [
+            "/opt/ros/humble/lib/python3.10/site-packages"
+          ],
+          "terminal.integrated.defaultProfile.linux": "bash",
+          "terminal.integrated.profiles.linux": {
+            "bash": {
+              "path": "/bin/bash",
+              "args": ["--login"]
+            }
+          }
+        }
+      }
+    },
+    "features": {
+      "ghcr.io/devcontainers/features/git:1": {},
+      "ghcr.io/devcontainers/features/python:1": {}
+    }
+  }
