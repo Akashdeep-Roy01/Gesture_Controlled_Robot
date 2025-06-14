@@ -16,6 +16,10 @@
 
   <author email="akashdeep.roy@rwth-aachen.de">roy</author>
 
+  <depend>rclcpp</depend>
+  <depend>moveit_ros_planning_interface</depend>
+  <depend>geometry_msgs</depend>
+
   <buildtool_depend>ament_cmake</buildtool_depend>
 
   <exec_depend>moveit_ros_move_group</exec_depend>

@@ -123,6 +123,21 @@ def generate_launch_description():
         arguments=["gripper_controller", "-c", "/controller_manager"],
     )
 
+    gesture_to_pose_node = Node(
+        package='gesture_to_pose',  # Replace with your package name
+        executable='gesture_node',
+        name='gesture_to_pose_node',
+        output='screen',
+    )
+
+    teleoperation_node = Node(
+        package='iisy_moveit_config',  # Replace with your package name
+        executable='teleoperator_node',
+        name='teleoperation_node',
+        output='screen',
+        parameters=[{'use_sim_time': True}]  # Set to True if using simulation
+    )
+
 
     return LaunchDescription(
         [
@@ -134,6 +149,8 @@ def generate_launch_description():
             joint_state_broadcaster_spawner,
             arm_controller_spawner,
             gripper_controller_spawner,
+            gesture_to_pose_node,
+            teleoperation_node,
         ]
     )
 
