@@ -4,6 +4,8 @@
   <xacro:include filename="$(find kuka_lbr_iisy_support)/urdf/lbr_iisy3_r760_macro.xacro"/>
   <!-- Read additional arguments  -->
   <xacro:arg name="prefix" default=""/>
+  <!-- Global world link -->
+  <link name="world"/>
   
   <xacro:arg name="x" default="0"/>
   <xacro:arg name="y" default="0"/>

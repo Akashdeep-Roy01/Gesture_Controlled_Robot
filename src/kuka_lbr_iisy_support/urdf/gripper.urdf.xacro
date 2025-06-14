@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot xmlns:xacro="http://wiki.ros.org/xacro" name="robotiq_gripper">    
-    <link name="robotiq_85_base_link">
+<robot xmlns:xacro="http://wiki.ros.org/xacro">
+  <xacro:macro name="robotiq_gripper" params="prefix">
+    <link name="${prefix}robotiq_85_base_link">
       <visual>
         <geometry>
           <mesh filename="package://kuka_lbr_iisy_support/meshes/robotiq_85_gripper/visual/robotiq_85_base_link.dae"/>
@@ -20,24 +21,24 @@
       </inertial>
     </link>
 
-    <joint name="robotiq_85_left_knuckle_joint" type="revolute">
-      <parent link="robotiq_85_base_link"/>
-      <child link="robotiq_85_left_knuckle_link"/>
+    <joint name="${prefix}robotiq_85_left_knuckle_joint" type="revolute">
+      <parent link="${prefix}robotiq_85_base_link"/>
+      <child link="${prefix}robotiq_85_left_knuckle_link"/>
       <axis xyz="0 0 1"/>
       <origin rpy="3.14 0.0 0.0" xyz="0.05490451627 0.03060114443 0.0"/>
       <limit lower="0.0" upper="0.80285" velocity="3.14" effort="1000"/>
     </joint>
 
-    <joint name="robotiq_85_right_knuckle_joint" type="revolute">
-      <parent link="robotiq_85_base_link"/>
-      <child link="robotiq_85_right_knuckle_link"/>
+    <joint name="${prefix}robotiq_85_right_knuckle_joint" type="revolute">
+      <parent link="${prefix}robotiq_85_base_link"/>
+      <child link="${prefix}robotiq_85_right_knuckle_link"/>
       <axis xyz="0 0 1"/>
       <origin rpy="0.0 0.0 0.0" xyz="0.05490451627 -0.03060114443 0.0"/>
       <limit lower="-3.14" upper="3.14" velocity="3.14" effort="1000"/>
-      <mimic joint="robotiq_85_left_knuckle_joint"/>
+      <mimic joint="${prefix}robotiq_85_left_knuckle_joint"/>
     </joint>
 
-    <link name="robotiq_85_left_knuckle_link">
+    <link name="${prefix}robotiq_85_left_knuckle_link">
       <visual>
         <geometry>
           <mesh filename="package://kuka_lbr_iisy_support/meshes/robotiq_85_gripper/visual/robotiq_85_knuckle_link.dae"/>
@@ -57,7 +58,7 @@
       </inertial>
     </link>
 
-    <link name="robotiq_85_right_knuckle_link">
+    <link name="${prefix}robotiq_85_right_knuckle_link">
       <visual>
         <geometry>
           <mesh filename="package://kuka_lbr_iisy_support/meshes/robotiq_85_gripper/visual/robotiq_85_knuckle_link.dae"/>
@@ -77,19 +78,19 @@
       </inertial>
     </link>
 
-    <joint name="robotiq_85_left_finger_joint" type="fixed">
-      <parent link="robotiq_85_left_knuckle_link"/>
-      <child link="robotiq_85_left_finger_link"/>
+    <joint name="${prefix}robotiq_85_left_finger_joint" type="fixed">
+      <parent link="${prefix}robotiq_85_left_knuckle_link"/>
+      <child link="${prefix}robotiq_85_left_finger_link"/>
       <origin xyz="-0.00408552455 -0.03148604435 0.0" rpy="0 0 0" />
     </joint>
 
-    <joint name="robotiq_85_right_finger_joint" type="fixed">
-      <parent link="robotiq_85_right_knuckle_link"/>
-      <child link="robotiq_85_right_finger_link"/>
+    <joint name="${prefix}robotiq_85_right_finger_joint" type="fixed">
+      <parent link="${prefix}robotiq_85_right_knuckle_link"/>
+      <child link="${prefix}robotiq_85_right_finger_link"/>
       <origin xyz="-0.00408552455 -0.03148604435 0.0" rpy="0 0 0" />
     </joint>
 
-    <link name="robotiq_85_left_finger_link">
+    <link name="${prefix}robotiq_85_left_finger_link">
       <visual>
         <geometry>
           <mesh filename="package://kuka_lbr_iisy_support/meshes/robotiq_85_gripper/visual/robotiq_85_finger_link.dae"/>
@@ -109,7 +110,7 @@
       </inertial>
     </link>
 
-    <link name="robotiq_85_right_finger_link">
+    <link name="${prefix}robotiq_85_right_finger_link">
       <visual>
         <geometry>
           <mesh filename="package://kuka_lbr_iisy_support/meshes/robotiq_85_gripper/visual/robotiq_85_finger_link.dae"/>
@@ -129,25 +130,25 @@
       </inertial>
     </link>
 
-    <joint name="robotiq_85_left_inner_knuckle_joint" type="revolute">
-      <parent link="robotiq_85_base_link"/>
-      <child link="robotiq_85_left_inner_knuckle_link"/>
+    <joint name="${prefix}robotiq_85_left_inner_knuckle_joint" type="revolute">
+      <parent link="${prefix}robotiq_85_base_link"/>
+      <child link="${prefix}robotiq_85_left_inner_knuckle_link"/>
       <axis xyz="0 0 1"/>
       <origin xyz="0.06142 0.0127 0" rpy="3.14 0.0 0.0" />
       <limit lower="-3.14" upper="3.14" velocity="3.14" effort="0.1"/>
-      <mimic joint="robotiq_85_left_knuckle_joint" offset="0"/>
+      <mimic joint="${prefix}robotiq_85_left_knuckle_joint" offset="0"/>
     </joint>
 
-    <joint name="robotiq_85_right_inner_knuckle_joint" type="revolute">
-      <parent link="robotiq_85_base_link"/>
-      <child link="robotiq_85_right_inner_knuckle_link"/>
+    <joint name="${prefix}robotiq_85_right_inner_knuckle_joint" type="revolute">
+      <parent link="${prefix}robotiq_85_base_link"/>
+      <child link="${prefix}robotiq_85_right_inner_knuckle_link"/>
       <axis xyz="0 0 1"/>
       <origin xyz="0.06142 -0.0127 0" rpy="0 0 0"/>
       <limit lower="-3.14" upper="3.14" velocity="3.14" effort="0.1"/>
-      <mimic joint="robotiq_85_left_knuckle_joint" offset="0"/>
+      <mimic joint="${prefix}robotiq_85_left_knuckle_joint" offset="0"/>
     </joint>
 
-    <link name="robotiq_85_left_inner_knuckle_link">
+    <link name="${prefix}robotiq_85_left_inner_knuckle_link">
       <visual>
         <geometry>
           <mesh filename="package://kuka_lbr_iisy_support/meshes/robotiq_85_gripper/visual/robotiq_85_inner_knuckle_link.dae"/>
@@ -166,7 +167,7 @@
              izx = "0.000000" izy = "0.000000" izz = "0.000035" />
       </inertial>
     </link>
-    <link name="robotiq_85_right_inner_knuckle_link">
+    <link name="${prefix}robotiq_85_right_inner_knuckle_link">
       <visual>
         <geometry>
           <mesh filename="package://kuka_lbr_iisy_support/meshes/robotiq_85_gripper/visual/robotiq_85_inner_knuckle_link.dae"/>
@@ -186,26 +187,25 @@
       </inertial>
     </link>
 
-    <joint name="robotiq_85_left_finger_tip_joint" type="revolute">
-      <parent link="robotiq_85_left_inner_knuckle_link"/>
-      <child link="robotiq_85_left_finger_tip_link"/>
+    <joint name="${prefix}robotiq_85_left_finger_tip_joint" type="revolute">
+      <parent link="${prefix}robotiq_85_left_inner_knuckle_link"/>
+      <child link="${prefix}robotiq_85_left_finger_tip_link"/>
       <axis xyz="0 0 1"/>
       <origin xyz="0.04303959807 -0.03759940821 0.0" rpy="0.0 0.0 0.0"/>
       <limit lower="-3.14" upper="3.14" velocity="3.14" effort="0.1"/>
-      <mimic joint="robotiq_85_left_knuckle_joint" multiplier="-1"/>
+      <mimic joint="${prefix}robotiq_85_left_knuckle_joint" multiplier="-1"/>
     </joint>
 
-    <joint name="robotiq_85_right_finger_tip_joint" type="revolute">
-      <parent link="robotiq_85_right_inner_knuckle_link"/>
-      <child link="robotiq_85_right_finger_tip_link"/>
+    <joint name="${prefix}robotiq_85_right_finger_tip_joint" type="revolute">
+      <parent link="${prefix}robotiq_85_right_inner_knuckle_link"/>
+      <child link="${prefix}robotiq_85_right_finger_tip_link"/>
       <axis xyz="0 0 1"/>
       <origin rpy="0.0 0.0 0.0" xyz="0.04303959807 -0.03759940821  0.0"/>
       <limit lower="-3.14" upper="3.14" velocity="3.14" effort="0.1"/>
-      <mimic joint="robotiq_85_left_knuckle_joint" multiplier="-1"/>
+      <mimic joint="${prefix}robotiq_85_left_knuckle_joint" multiplier="-1"/>
     </joint>
 
-
-    <link name="robotiq_85_left_finger_tip_link">
+    <link name="${prefix}robotiq_85_left_finger_tip_link">
       <visual>
         <geometry>
           <mesh filename="package://kuka_lbr_iisy_support/meshes/robotiq_85_gripper/visual/robotiq_85_finger_tip_link.dae"/>
@@ -225,7 +225,7 @@
       </inertial>
     </link>
 
-    <link name="robotiq_85_right_finger_tip_link">
+    <link name="${prefix}robotiq_85_right_finger_tip_link">
       <visual>
         <geometry>
           <mesh filename="package://kuka_lbr_iisy_support/meshes/robotiq_85_gripper/visual/robotiq_85_finger_tip_link.dae"/>
@@ -244,4 +244,5 @@
              izx = "0.000000" izy = "0.000000" izz = "0.000006" />
       </inertial>
     </link>
+  </xacro:macro>
 </robot>
