@@ -6,7 +6,7 @@
   <xacro:include filename="$(find kuka_lbr_iisy_support)/urdf/gripper.urdf.xacro"/>
   
   <xacro:macro name="kuka_lbr_iisy3_r760_robot" params="prefix *origin">
-    <link name="world"/>
+    <!-- <link name="world"/> -->
     <link name="${prefix}base_link">
       <collision>
         <geometry>
@@ -181,8 +181,9 @@
       <origin rpy="0 ${pi} -0.0" xyz="0.0 0.0 -0.1605"/>
       <parent link="${prefix}link_6"/>
     </joint>-->
-    <joint name="gripper_joint" type="fixed">
-      <child link="robotiq_85_base_link"/>
+    <xacro:robotiq_gripper prefix="${prefix}"/>
+    <joint name="${prefix}gripper_joint" type="fixed">
+      <child link="${prefix}robotiq_85_base_link"/>
       <origin rpy="0 0 0" xyz="0.0 0.0 0.0"/>
       <parent link="${prefix}flange"/>
     </joint> 

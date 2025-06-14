@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="dual_lbr_iisy3_r760">
+  <!-- Import iisy urdf file  -->
+  <xacro:include filename="$(find kuka_lbr_iisy_support)/urdf/lbr_iisy3_r760_macro.xacro"/>
+  
+  <!-- Global world link -->
+  <link name="world"/>
+
+  <!-- Arguments for robot 1 -->
+  <xacro:arg name="prefix1" default="robot1_"/>
+  <xacro:arg name="x1" default="0.0"/>
+  <xacro:arg name="y1" default="1.5"/>
+  <xacro:arg name="z1" default="0"/>
+  <xacro:arg name="roll1" default="0"/>
+  <xacro:arg name="pitch1" default="0"/>
+  <xacro:arg name="yaw1" default="0"/>
+
+  <!-- Arguments for robot 2 -->
+  <xacro:arg name="prefix2" default="robot2_"/>
+  <xacro:arg name="x2" default="0"/>
+  <xacro:arg name="y2" default="-1.5"/>
+  <xacro:arg name="z2" default="0"/>
+  <xacro:arg name="roll2" default="0"/>
+  <xacro:arg name="pitch2" default="0"/>
+  <xacro:arg name="yaw2" default="0"/>
+
+  <!-- Robot 1 -->
+  <xacro:kuka_lbr_iisy3_r760_robot prefix="$(arg prefix1)">
+    <origin xyz="$(arg x1) $(arg y1) $(arg z1)" rpy="$(arg roll1) $(arg pitch1) $(arg yaw1)"/>
+  </xacro:kuka_lbr_iisy3_r760_robot>
+
+  <!-- Robot 2 -->
+  <xacro:kuka_lbr_iisy3_r760_robot prefix="$(arg prefix2)">
+    <origin xyz="$(arg x2) $(arg y2) $(arg z2)" rpy="$(arg roll2) $(arg pitch2) $(arg yaw2)"/>
+  </xacro:kuka_lbr_iisy3_r760_robot>
+</robot>
