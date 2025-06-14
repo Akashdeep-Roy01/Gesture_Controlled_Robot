@@ -1,0 +1,17 @@
+# Default initial positions for dual_lbr_iisy3_r760's ros2_control fake system
+
+initial_positions:
+  robot1_joint_1: 0
+  robot1_joint_2: 0
+  robot1_joint_3: 0
+  robot1_joint_4: 0
+  robot1_joint_5: 0
+  robot1_joint_6: 0
+  robot1_robotiq_85_left_knuckle_joint: 0
+  robot2_joint_1: 0
+  robot2_joint_2: 0
+  robot2_joint_3: 0
+  robot2_joint_4: 0
+  robot2_joint_5: 0
+  robot2_joint_6: 0
+  robot2_robotiq_85_left_knuckle_joint: 0

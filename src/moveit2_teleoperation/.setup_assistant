@@ -1,0 +1,25 @@
+moveit_setup_assistant_config:
+  urdf:
+    package: kuka_lbr_iisy_support
+    relative_path: urdf/dual_lbr_iisy3_r760.urdf.xacro
+  srdf:
+    relative_path: config/dual_lbr_iisy3_r760.srdf
+  package_settings:
+    author_name: roy
+    author_email: akashdeep.roy@rwth-aachen.de
+    generated_timestamp: 1749910303
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
+  modified_urdf:
+    xacros:
+      - control_xacro
+  control_xacro:
+    command:
+      - position
+    state:
+      - position
+      - velocity
