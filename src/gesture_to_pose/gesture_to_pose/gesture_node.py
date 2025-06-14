@@ -33,7 +33,7 @@ class FingerTracker(Node):
         self.last_command = None  # Track last command to avoid spamming
         
         self.timer = self.create_timer(0.033, self.timer_callback)  # ~30 FPS
-        self.get_logger().info('Finger Tracker Node started')
+        # self.get_logger().info('Gesture Detection Node started')
 
     def timer_callback(self):
         ret, frame = self.cap.read()
@@ -62,7 +62,7 @@ class FingerTracker(Node):
                 middle_pixel_x, middle_pixel_y = int(middle_tip.x * w), int(middle_tip.y * h)
                 middle_mcp_pixel_y = int(middle_mcp.y * h)
                 
-                # Determine if middle finger is up (tip y-coordinate < MCP y-coordinate)
+                # Determine if middle finger is up (y-coordinate < MCP y-coordinate)
                 is_middle_finger_up = middle_tip.y < middle_mcp.y
                 command = Bool()
                 command.data = is_middle_finger_up

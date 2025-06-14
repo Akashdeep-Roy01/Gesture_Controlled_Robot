@@ -35,6 +35,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
     ros-humble-robot-state-publisher \
     ros-humble-moveit \
     ros-humble-rviz2 \
+    ros-humble-vision-opencv \
+    ros-humble-cv-bridge \
     && rm -rf /var/lib/apt/lists/*
 
 # Initialize rosdep
