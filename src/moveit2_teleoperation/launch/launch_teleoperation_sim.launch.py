@@ -67,15 +67,6 @@ def generate_launch_description():
         ],
     )
 
-    # Static TF
-    # static_tf_node = Node(
-    #     package="tf2_ros",
-    #     executable="static_transform_publisher",
-    #     name="static_transform_publisher",
-    #     output="log",
-    #     arguments=["0.0", "0.0", "0.0", "0.0", "0.0", "0.0", "world", "panda_link0"],
-    # )
-
     # Publish TF
     robot_state_publisher = Node(
         package="robot_state_publisher",
@@ -142,6 +133,13 @@ def generate_launch_description():
         output='screen',
     )
 
+    joint_angle_publisher = Node(
+        package='moveit2_teleoperation',  # Replace with your package name
+        executable='joint_angle_publisher',
+        name='joint_angle_publisher',
+        output='screen',
+    )
+
     teleoperation_node = Node(
         package='moveit2_teleoperation',  # Replace with your package name
         executable='teleoperator_node',
@@ -164,6 +162,7 @@ def generate_launch_description():
             arm2_controller_spawner,
             gripper2_controller_spawner,
             gesture_to_pose_node,
+            joint_angle_publisher,
             teleoperation_node,
         ]
     )
