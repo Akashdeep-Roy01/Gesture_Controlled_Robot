@@ -135,6 +135,22 @@ def generate_launch_description():
         arguments=["robot2_gripper_controller", "-c", "/controller_manager"],
     )
 
+    gesture_to_pose_node = Node(
+        package='gesture_to_pose',  # Replace with your package name
+        executable='gesture_node',
+        name='gesture_to_pose_node',
+        output='screen',
+    )
+
+    teleoperation_node = Node(
+        package='moveit2_teleoperation',  # Replace with your package name
+        executable='teleoperator_node',
+        name='teleoperation_node',
+        output='screen',
+        parameters=[{'use_sim_time': True}]  # Set to True if using simulation
+    )
+
+
     return LaunchDescription(
         [
             ros2_control_hardware_type,
@@ -147,6 +163,8 @@ def generate_launch_description():
             gripper1_controller_spawner,
             arm2_controller_spawner,
             gripper2_controller_spawner,
+            gesture_to_pose_node,
+            teleoperation_node,
         ]
     )
 
