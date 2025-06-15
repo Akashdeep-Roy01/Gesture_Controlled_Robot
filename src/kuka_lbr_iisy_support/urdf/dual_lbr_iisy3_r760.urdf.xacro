@@ -9,7 +9,7 @@
   <!-- Arguments for robot 1 -->
   <xacro:arg name="prefix1" default="robot1_"/>
   <xacro:arg name="x1" default="0.0"/>
-  <xacro:arg name="y1" default="1.5"/>
+  <xacro:arg name="y1" default="-1.0"/>
   <xacro:arg name="z1" default="0"/>
   <xacro:arg name="roll1" default="0"/>
   <xacro:arg name="pitch1" default="0"/>
@@ -18,7 +18,7 @@
   <!-- Arguments for robot 2 -->
   <xacro:arg name="prefix2" default="robot2_"/>
   <xacro:arg name="x2" default="0"/>
-  <xacro:arg name="y2" default="-1.5"/>
+  <xacro:arg name="y2" default="1.0"/>
   <xacro:arg name="z2" default="0"/>
   <xacro:arg name="roll2" default="0"/>
   <xacro:arg name="pitch2" default="0"/>
