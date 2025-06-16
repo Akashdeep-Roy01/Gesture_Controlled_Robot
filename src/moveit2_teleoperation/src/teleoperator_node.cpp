@@ -38,22 +38,25 @@ public:
   }
 
 private:
+  // Function to move robot 1 as per latest pose msg.
   void robot1_pose_callback(const geometry_msgs::msg::Pose& target_pose)
   {
     move_arm(arm1_group_, target_pose, "arm1");
   }
 
+  // Function to move robot 2 as per latest pose msg.
   void robot2_pose_callback(const geometry_msgs::msg::Pose& target_pose)
   {
     move_arm(arm2_group_, target_pose, "arm2");
   }
 
+  // Function to control gripper.
   void gripper_callback(const std_msgs::msg::Bool::SharedPtr msg,
                         moveit::planning_interface::MoveGroupInterface& gripper_group,
                         const std::string& gripper_name)
   {
     std::lock_guard<std::mutex> lock(gripper_mutex_);
-    std::string target_pose = msg->data ? "close" : "open";
+    std::string target_pose = msg->data ? "close" : "open"; // if thumb extended opens
     RCLCPP_INFO(get_logger(), "Planning to %s %s...", target_pose.c_str(), gripper_name.c_str());
     
     gripper_group.setNamedTarget(target_pose);
@@ -68,6 +71,7 @@ private:
     }
   }
 
+  // Function to plan and move the arm. First cartesain planning is attempted, if fails then RRTConnect is used.
   void move_arm(moveit::planning_interface::MoveGroupInterface& arm_group,
                 const geometry_msgs::msg::Pose& target_pose,
                 const std::string& arm_name)
@@ -77,7 +81,7 @@ private:
     arm_group.setStartStateToCurrentState();
     std::vector<geometry_msgs::msg::Pose> waypoints = {target_pose};
     moveit_msgs::msg::RobotTrajectory trajectory;
-    double fraction = arm_group.computeCartesianPath(waypoints, EEF_STEP, JUMP_THRESHOLD, trajectory);
+    double fraction = arm_group.computeCartesianPath(waypoints, EEF_STEP, JUMP_THRESHOLD, trajectory); // Cartesian Planner
 
     if (fraction > 0.9)
     {
@@ -90,7 +94,7 @@ private:
         RCLCPP_ERROR_STREAM(get_logger(), arm_name << ": Cartesian path execution failed with code: " << result.val);
       }
     }
-    else
+    else // use OMPL (RRTCnonect default)
     {
       arm_group.setPoseTarget(waypoints[0]);
       moveit::planning_interface::MoveGroupInterface::Plan plan;

@@ -35,13 +35,14 @@ class GestureToPose(Node):
         self.left_hand_buffer = []
         self.right_hand_buffer = []
         
-        self.roll_step = 0.1  # Radians per frame
+        self.roll_step = 0.1  
         self.left_roll = 0.0
         self.right_roll = 0.0
         self.max_roll = np.pi*0.5
                 
         self.timer = self.create_timer(0.1, self.timer_callback)  # ~10 FPS
 
+    # Function to reduce pose noise by averaging over last 5 values.
     def apply_smoothing(self, is_left_hand, y_m, z_m):
         """Apply moving average smoothing to y and z coordinates."""
         buffer = self.left_hand_buffer if is_left_hand else self.right_hand_buffer
@@ -55,6 +56,7 @@ class GestureToPose(Node):
             return avg_coords[0], avg_coords[1]
         return y_m, z_m
     
+    # Function to check if a particular finger is extended based upon distance between hand landmark positions (at idx_1, idx_2, idx_3).
     def is_finger_extended(self, hand_landmarks, idx_1, idx_2, idx_3):
         """Check if a finger is extended."""
         tip = hand_landmarks.landmark[idx_1]
@@ -69,6 +71,7 @@ class GestureToPose(Node):
         )
         return dist_tip_to_wrist > dist_mcp_to_wrist
 
+    # Function to idntify gestures and publish pose and gripper messages
     def timer_callback(self):
         if self.cap is None or not self.cap.isOpened():
             self.get_logger().warn("Webcam is not available")
@@ -90,6 +93,8 @@ class GestureToPose(Node):
         
         if results.multi_hand_landmarks and results.multi_handedness:
             for hand_landmarks, handedness in zip(results.multi_hand_landmarks, results.multi_handedness):
+
+                # track index finger tip for y,z motion
                 index_tip = hand_landmarks.landmark[8]
                 index_pixel_x, index_pixel_y = int(index_tip.x * w), int(index_tip.y * h)
                 
@@ -111,10 +116,12 @@ class GestureToPose(Node):
                 
                 y_m_smooth, z_m_smooth = self.apply_smoothing(is_left_hand, y_m, z_m)
                 
+                # Gripper control based upon thumb
                 gripper_closed = not self.is_finger_extended(hand_landmarks, 4, 2, 5)
                 gripper_msg = Bool()
                 gripper_msg.data = gripper_closed
                 
+                # Roll angle based upon middle (increase) and little (decrease) finger status
                 middle_extended = self.is_finger_extended(hand_landmarks, 12, 9, 0)
                 pinky_extended = self.is_finger_extended(hand_landmarks, 20, 17, 0)
                 
@@ -131,7 +138,7 @@ class GestureToPose(Node):
                 else:
                     self.right_roll = current_roll
                 
-               
+                # Display results on image
                 color = (0, 0, 255) if is_left_hand else (255, 0, 0)
                 cv2.circle(frame_bgr, (index_pixel_x, index_pixel_y), 10, color, -1)
                 self.mp_draw.draw_landmarks(frame_bgr, hand_landmarks, self.mp_hands.HAND_CONNECTIONS)
@@ -150,7 +157,8 @@ class GestureToPose(Node):
                         (text_base_x, text_base_y + 3 * line_height), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
                 cv2.putText(frame_bgr, f'Roll: {current_roll:.3f} rad', 
                         (text_base_x, text_base_y + 4 * line_height), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color, 2)
-         
+
+                # Generate Pose message
                 pose_msg = Pose()
                 pose_msg.position.x = 0.3
                 pose_msg.position.y = y_m_smooth + (-1.0 if is_left_hand else 1.0)

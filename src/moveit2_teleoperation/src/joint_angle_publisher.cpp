@@ -11,6 +11,7 @@ public:
   }
 
 private:
+  // function to read the combined joint state msg and then extract them into individual robot joint messages.
   void joint_state_callback(const sensor_msgs::msg::JointState::SharedPtr msg) {
     sensor_msgs::msg::JointState robot1_msg, robot2_msg;
     robot1_msg.header = msg->header; // Copy timestamp
