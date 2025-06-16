@@ -9,9 +9,9 @@ from std_msgs.msg import Bool
 from cv_bridge import CvBridge
 import numpy as np
 
-class FingerTracker(Node):
+class GestureToPose(Node):
     def __init__(self):
-        super().__init__('finger_tracker')
+        super().__init__('gesture_to_pose')
         self.image_publisher_ = self.create_publisher(Image, 'web_cam_image', 10)
         self.robot1_pose_publisher_ = self.create_publisher(Pose, '/robot1/target_pose', 10)
         self.robot2_pose_publisher_ = self.create_publisher(Pose, '/robot2/target_pose', 10)
@@ -101,11 +101,11 @@ class FingerTracker(Node):
                     continue
 
                 if is_left_hand:
-                    # Map left half of image (0 to center_x) to -0.3 to 0.3
-                    y_m = (index_tip.x * w / center_x) * 0.6 - 0.3
+                    # Map left half of image (0 to center_x) to -0.5 to 0.5
+                    y_m = (index_tip.x * w / center_x) - 0.5
                 else:
-                    # Map right half of image (center_x to w) to -0.3 to 0.3
-                    y_m = ((index_tip.x * w - center_x) / (w - center_x)) * 0.6 - 0.3
+                    # Map right half of image (center_x to w) to -0.5 to 0.5
+                    y_m = ((index_tip.x * w - center_x) / (w - center_x)) - 0.5
                 
                 z_m = (1 - index_tip.y) * 0.5 + 0.1 # z motion betwwen 0.1 to 0.6
                 
@@ -181,7 +181,7 @@ class FingerTracker(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-    node = FingerTracker()
+    node = GestureToPose()
 
     rclpy.spin(node)
 
