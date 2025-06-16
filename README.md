@@ -31,7 +31,7 @@ This package includes the following nodes:
 - **Teleoperator**
 
   - Starts 4 move group interfaces to control the two robots and their grippers. 
-  - Subscribes to the different topics and then plans and executes the  trajectory.
+  - Subscribes to the different topics and then plans and executes the trajectory.
 
 - **Joint_Angle_Publisher**
 
@@ -70,7 +70,7 @@ source install/setup.bash
 
 ### 4. Start using launcher
 
-Launch the dummy bin picking cell, using:
+Launch using:
 ```bash
 ros2 launch moveit2_teleoperation launch_teleoperation_sim.launch.py
 ```
