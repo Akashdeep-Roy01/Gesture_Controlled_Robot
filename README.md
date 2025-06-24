@@ -1,10 +1,10 @@
-# Teleoperation Challenge Solution
+# Gesture Controlled Robot
 
-This README provides instructions to run the solution.
+A ROS2 Humble package to control two robot arms using Hand gestures. Hand gestures detected using Mediapipe are used to generate target poses for the robots. Moveit2 is used to plan and execute the motion.
 
 ## Overview
 
-The solution is implemented using **ROS 2 Humble** and consists of following ROS 2 packages:
+Packages:
 - `gesture_to_pose`
 - `moveit2_teleoperation`
 - `kuka_lbr_iisy_support`
@@ -94,22 +94,7 @@ ros2 launch moveit2_teleoperation launch_teleoperation_sim.launch.py
 
   5. `Decrease Roll angle` - Tracks if little finger is extended, then decrease the roll value 
 
-      ![Index Tip](Images/decrease_angle.png)
-
-            
-
-## Task Completion Overview
-
-
-- [x] **Task 1** - Environment Setup - ROS2 Humble + Docker
-- [x] **Task 2** - Robot Arm Visualisation 
-- [x] **Task 3** - Message Publishing - joint_angle_publisher node
-- [x] **Task 4** - Teleoperation node
-  - [x] **Version Control** - Added
-  - [x] **Video Demonstration** - demo.webm
-  - [x] **References** - Added below
-- [x] **Handle Noise** - pose y,z values averaged over last 5 values
-- [x] **One operator**
+      ![Index Tip](Images/decrease_angle.png)    
 
 ### 8. References
 - [ROS 2 Offical documentation](https://docs.ros.org/en/humble/Tutorials.html)
