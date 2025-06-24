@@ -27,8 +27,8 @@ private:
       }
     }
 
-    if (!robot1_msg.name.empty()) robot1_publisher_->publish(robot1_msg);
-    if (!robot2_msg.name.empty()) robot2_publisher_->publish(robot2_msg);
+    robot1_publisher_->publish(robot1_msg);
+    robot2_publisher_->publish(robot2_msg);
   }
 
   rclcpp::Publisher<sensor_msgs::msg::JointState>::SharedPtr robot1_publisher_, robot2_publisher_;

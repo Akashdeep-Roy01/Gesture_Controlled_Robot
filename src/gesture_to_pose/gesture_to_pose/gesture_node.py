@@ -183,7 +183,6 @@ class GestureToPose(Node):
     def destroy_node(self):
         if self.cap is not None:
             self.cap.release()
-        cv2.destroyAllWindows()
         self.hands.close()
         super().destroy_node()
 
