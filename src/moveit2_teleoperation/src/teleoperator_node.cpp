@@ -10,52 +10,50 @@ class TeleoperatorNode : public rclcpp::Node
 {
 public:
   TeleoperatorNode()
-  : Node("teleoperator_node"),
-    arm1_group_(std::shared_ptr<rclcpp::Node>(this, [](rclcpp::Node*) {}), "arm1"),
-    arm2_group_(std::shared_ptr<rclcpp::Node>(this, [](rclcpp::Node*) {}), "arm2"),
-    gripper1_group_(std::shared_ptr<rclcpp::Node>(this, [](rclcpp::Node*) {}), "gripper1"),
-    gripper2_group_(std::shared_ptr<rclcpp::Node>(this, [](rclcpp::Node*) {}), "gripper2")
-  {
+  : Node("teleoperator_node")
+  { 
+    arm1_group_ = std::make_shared<moveit::planning_interface::MoveGroupInterface>(std::shared_ptr<rclcpp::Node>(this, [](rclcpp::Node*) {}), "arm1");
+    arm2_group_ = std::make_shared<moveit::planning_interface::MoveGroupInterface>(std::shared_ptr<rclcpp::Node>(this, [](rclcpp::Node*) {}), "arm2");
+    gripper1_group_ = std::make_shared<moveit::planning_interface::MoveGroupInterface>(std::shared_ptr<rclcpp::Node>(this, [](rclcpp::Node*) {}), "gripper1");
+    gripper2_group_ = std::make_shared<moveit::planning_interface::MoveGroupInterface>(std::shared_ptr<rclcpp::Node>(this, [](rclcpp::Node*) {}), "gripper2");
+
+    rclcpp::SubscriptionOptions options;
+    options.callback_group = create_callback_group(rclcpp::CallbackGroupType::Reentrant);
+
     robot1_pose_subscription_ = create_subscription<geometry_msgs::msg::Pose>(
       "/robot1/target_pose", 10,
-      std::bind(&TeleoperatorNode::robot1_pose_callback, this, std::placeholders::_1));
+      [this](const geometry_msgs::msg::Pose::SharedPtr msg) {
+        robot_pose_callback(*msg, *arm1_group_, arm1_mutex_, "arm1");
+      }, options);
 
     robot2_pose_subscription_ = create_subscription<geometry_msgs::msg::Pose>(
       "/robot2/target_pose", 10,
-      std::bind(&TeleoperatorNode::robot2_pose_callback, this, std::placeholders::_1));
+      [this](const geometry_msgs::msg::Pose::SharedPtr msg) {
+        robot_pose_callback(*msg, *arm2_group_, arm2_mutex_, "arm2");
+      }, options);
 
     gripper1_subscription_ = create_subscription<std_msgs::msg::Bool>(
       "/robot1/gripper_command", 10,
       [this](const std_msgs::msg::Bool::SharedPtr msg) {
-        gripper_callback(msg, gripper1_group_, "gripper1");
-      });
+        gripper_callback(msg, *gripper1_group_, gripper1_mutex_, "gripper1");
+      }, options);
 
     gripper2_subscription_ = create_subscription<std_msgs::msg::Bool>(
       "/robot2/gripper_command", 10,
       [this](const std_msgs::msg::Bool::SharedPtr msg) {
-        gripper_callback(msg, gripper2_group_, "gripper2");
-      });
+        gripper_callback(msg, *gripper2_group_, gripper2_mutex_, "gripper2");
+      }, options);
   }
 
 private:
-  // Function to move robot 1 as per latest pose msg.
-  void robot1_pose_callback(const geometry_msgs::msg::Pose& target_pose)
-  {
-    move_arm(arm1_group_, target_pose, "arm1");
-  }
-
-  // Function to move robot 2 as per latest pose msg.
-  void robot2_pose_callback(const geometry_msgs::msg::Pose& target_pose)
-  {
-    move_arm(arm2_group_, target_pose, "arm2");
-  }
 
   // Function to control gripper.
   void gripper_callback(const std_msgs::msg::Bool::SharedPtr msg,
                         moveit::planning_interface::MoveGroupInterface& gripper_group,
+                        std::mutex& gripper_mutex,
                         const std::string& gripper_name)
   {
-    std::lock_guard<std::mutex> lock(gripper_mutex_);
+    std::lock_guard<std::mutex> lock(gripper_mutex);
     std::string target_pose = msg->data ? "close" : "open"; // if thumb extended opens
     RCLCPP_INFO(get_logger(), "Planning to %s %s...", target_pose.c_str(), gripper_name.c_str());
     
@@ -72,11 +70,12 @@ private:
   }
 
   // Function to plan and move the arm. First cartesain planning is attempted, if fails then RRTConnect is used.
-  void move_arm(moveit::planning_interface::MoveGroupInterface& arm_group,
-                const geometry_msgs::msg::Pose& target_pose,
-                const std::string& arm_name)
+  void robot_pose_callback(const geometry_msgs::msg::Pose& target_pose,
+                           moveit::planning_interface::MoveGroupInterface& arm_group, 
+                           std::mutex& arm_mutex,
+                           const std::string& arm_name)
   {
-    std::lock_guard<std::mutex> lock(arm_mutex_);
+    std::lock_guard<std::mutex> lock(arm_mutex);
     RCLCPP_INFO(get_logger(), "Received target pose for %s.", arm_name.c_str());
     arm_group.setStartStateToCurrentState();
     std::vector<geometry_msgs::msg::Pose> waypoints = {target_pose};
@@ -120,19 +119,25 @@ private:
   rclcpp::Subscription<geometry_msgs::msg::Pose>::SharedPtr robot2_pose_subscription_;
   rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr gripper1_subscription_;
   rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr gripper2_subscription_;
-  moveit::planning_interface::MoveGroupInterface arm1_group_;
-  moveit::planning_interface::MoveGroupInterface gripper1_group_;
-  moveit::planning_interface::MoveGroupInterface arm2_group_;
-  moveit::planning_interface::MoveGroupInterface gripper2_group_;
-  std::mutex arm_mutex_;
-  std::mutex gripper_mutex_;
+  std::shared_ptr<moveit::planning_interface::MoveGroupInterface> arm1_group_;
+  std::shared_ptr<moveit::planning_interface::MoveGroupInterface> arm2_group_;
+  std::shared_ptr<moveit::planning_interface::MoveGroupInterface> gripper1_group_;
+  std::shared_ptr<moveit::planning_interface::MoveGroupInterface> gripper2_group_;
+    
+  std::mutex arm1_mutex_;
+  std::mutex gripper1_mutex_;
+  std::mutex arm2_mutex_;
+  std::mutex gripper2_mutex_;
 };
 
 int main(int argc, char** argv)
 {
   rclcpp::init(argc, argv);
   auto node = std::make_shared<TeleoperatorNode>();
-  rclcpp::spin(node);
+  // rclcpp::spin(node);
+  rclcpp::executors::MultiThreadedExecutor executor(rclcpp::ExecutorOptions(), 4); // 4 threads
+  executor.add_node(node);
+  executor.spin();
   rclcpp::shutdown();
   return 0;
 }
