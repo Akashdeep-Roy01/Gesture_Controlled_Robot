@@ -1,4 +1,6 @@
 # Gesture Controlled Robot
+![ROS2](https://img.shields.io/badge/ROS2-Humble-%23F46800.svg?style=for-the-badge&logo=ROS2-Humble&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-%230db7ed.svg?style=for-the-badge&logo=docker&logoColor=white)
 
 A ROS2 Humble package to control two robot arms using Hand gestures. Hand gestures detected using Mediapipe are used to generate target poses for the robots. Moveit2 is used to plan and execute the motion.
 
@@ -78,25 +80,28 @@ ros2 launch moveit2_teleoperation launch_teleoperation_sim.launch.py
 
   1. `Y-Z motion` - Tracks the tip of the index finger
 
-      ![Index Tip](Images/demo.png)
+      <img src="Images/demo.png" alt="Index Tip" width="25%" height="25%">
 
   2. `Close Gripper` - Tracks if thumb is retracted 
 
-      ![Index Tip](Images/gripper_close.png)
+      <img src="Images/gripper_close.png" alt="Index Tip" width="25%" height="25%">   
 
-  3. `Open Gripper` - Tracks if thumb is extended 
+  4. `Open Gripper` - Tracks if thumb is extended 
 
-      ![Index Tip](Images/gripper_open.png)
+     <img src="Images/gripper_open.png" alt="Index Tip" width="25%" height="25%">   
 
-  4. `Increase Roll angle` - Tracks if middle finger is extended then increases the roll value
+  5. `Increase Roll angle` - Tracks if middle finger is extended then increases the roll value
 
-      ![Index Tip](Images/increase_angle.png)
+      <img src="Images/increase_angle.png" alt="Index Tip" width="25%" height="25%">   
 
-  5. `Decrease Roll angle` - Tracks if little finger is extended, then decrease the roll value 
+  6. `Decrease Roll angle` - Tracks if little finger is extended, then decrease the roll value 
 
-      ![Index Tip](Images/decrease_angle.png)    
+      <img src="Images/decrease_angle.png" alt="Index Tip" width="25%" height="25%">   
 
-### 8. References
+### Video
+![Video](demo.gif) 
+
+### References
 - [ROS 2 Offical documentation](https://docs.ros.org/en/humble/Tutorials.html)
 - [Mediapipe](https://ai.google.dev/edge/mediapipe/solutions/vision/hand_landmarker)
 - [OpenCV](https://docs.opencv.org/4.x/d9/df8/tutorial_root.html)
